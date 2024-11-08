@@ -3,7 +3,11 @@ package com.example.productservice.services;
 import com.example.productservice.dtos.FakeStoreProductDto;
 import com.example.productservice.models.Category;
 import com.example.productservice.models.Product;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -29,6 +33,23 @@ public class FakeProductService implements ProductService {
 
         return convertFakeStoreProductDtoListToProductList(fakeStoreProductDtoList);
     }
+
+    @Override
+    public Product replaceProduct(Long id, Product product){
+        FakeStoreProductDto fakeStoreProductDto= new FakeStoreProductDto();
+        fakeStoreProductDto.setId(product.getId());
+        fakeStoreProductDto.setTitle(product.getTitle());
+        fakeStoreProductDto.setDescription(product.getDescription());
+        fakeStoreProductDto.setPrice(product.getPrice());
+
+        RequestCallback requestCallback=restTemplate.httpEntityCallback(fakeStoreProductDto,FakeStoreProductDto.class);
+        ResponseExtractor<ResponseEntity<FakeStoreProductDto>> responseExtractor=restTemplate.responseEntityExtractor(FakeStoreProductDto.class);
+        FakeStoreProductDto fakeStoreProductDto1=restTemplate
+                .execute("https://fakestoreapi.com/products/"+id, HttpMethod.PUT, requestCallback, responseExtractor)
+                .getBody();
+        return convertFakeStoreProductDtoToProduct(fakeStoreProductDto1);
+    }
+
     private Product convertFakeStoreProductDtoToProduct(FakeStoreProductDto fakeStoreProductDto){
 
         if (fakeStoreProductDto==null){
