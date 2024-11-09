@@ -43,11 +43,11 @@ public class ProductController {
         return productservice.replaceProduct(id, product);
     }
 
-    @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ProductNotFoundExpectionDto> handleProductNotFoundException(ProductNotFoundException e){
-        ProductNotFoundExpectionDto productNotFoundExceptiondto =new ProductNotFoundExpectionDto();
-        productNotFoundExceptiondto.setErrorCode(e.getId());
-        productNotFoundExceptiondto.setMessage(e.getMessage());
-        return new ResponseEntity<>(productNotFoundExceptiondto,HttpStatus.NOT_FOUND);
-    }
+//    @ExceptionHandler(ProductNotFoundException.class)
+//    public ResponseEntity<ProductNotFoundExpectionDto> handleProductNotFoundException(ProductNotFoundException e){
+//        ProductNotFoundExpectionDto productNotFoundExceptiondto =new ProductNotFoundExpectionDto();
+//        productNotFoundExceptiondto.setErrorCode(e.getId());
+//        productNotFoundExceptiondto.setMessage(e.getMessage());
+//        return new ResponseEntity<>(productNotFoundExceptiondto,HttpStatus.NOT_FOUND);
+//    }
 }
