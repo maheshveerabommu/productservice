@@ -1,12 +1,14 @@
 package com.example.productservice.controllers;
 
+import com.example.productservice.dtos.ProductNotFoundExpectionDto;
+import com.example.productservice.exceptions.ProductNotFoundException;
 import com.example.productservice.models.Product;
 import com.example.productservice.services.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.InstanceNotFoundException;
+
 import java.util.List;
 
 @RestController
@@ -18,14 +20,14 @@ public class ProductController {
         this.productservice = productservice;
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getproductByID(@PathVariable("id") Long id) throws InstanceNotFoundException {
+    public ResponseEntity<Product> getproductByID(@PathVariable("id") Long id) throws  ProductNotFoundException {
         Product product= productservice.getProductByID(id);
         ResponseEntity<Product> responseEntity;
 
-        if (product==null){
-            responseEntity=new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            return responseEntity;
-        }
+//        if (product==null){
+//            responseEntity=new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//            return responseEntity;
+//        }
         responseEntity=new ResponseEntity<>(product,HttpStatus.OK);
         return responseEntity;
 
@@ -41,8 +43,11 @@ public class ProductController {
         return productservice.replaceProduct(id, product);
     }
 
-    @ExceptionHandler(InstanceNotFoundException.class)
-    public ResponseEntity<String> handleInstanceNotFoundException(InstanceNotFoundException e){
-        return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ProductNotFoundExpectionDto> handleProductNotFoundException(ProductNotFoundException e){
+        ProductNotFoundExpectionDto productNotFoundExceptiondto =new ProductNotFoundExpectionDto();
+        productNotFoundExceptiondto.setErrorCode(e.getId());
+        productNotFoundExceptiondto.setMessage(e.getMessage());
+        return new ResponseEntity<>(productNotFoundExceptiondto,HttpStatus.NOT_FOUND);
     }
 }
