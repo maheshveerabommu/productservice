@@ -2,6 +2,8 @@ package com.example.productservice.controllers;
 
 import com.example.productservice.models.Product;
 import com.example.productservice.services.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,8 +17,16 @@ public class ProductController {
         this.productservice = productservice;
     }
     @GetMapping("/{id}")
-    public Product getproductByID(@PathVariable("id") Long id){
-        return productservice.getProductByID(id);
+    public ResponseEntity<Product> getproductByID(@PathVariable("id") Long id){
+        Product product= productservice.getProductByID(id);
+        ResponseEntity<Product> responseEntity;
+
+        if (product==null){
+            responseEntity=new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return responseEntity;
+        }
+        responseEntity=new ResponseEntity<>(product,HttpStatus.OK);
+        return responseEntity;
 
     }
 
