@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.InstanceNotFoundException;
 import java.util.List;
 
 @RestController
@@ -17,7 +18,7 @@ public class ProductController {
         this.productservice = productservice;
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getproductByID(@PathVariable("id") Long id){
+    public ResponseEntity<Product> getproductByID(@PathVariable("id") Long id) throws InstanceNotFoundException {
         Product product= productservice.getProductByID(id);
         ResponseEntity<Product> responseEntity;
 
@@ -38,5 +39,10 @@ public class ProductController {
     @PutMapping("/{id}")
     public Product replaceProduct(@PathVariable("id") Long id, @RequestBody Product product){
         return productservice.replaceProduct(id, product);
+    }
+
+    @ExceptionHandler(InstanceNotFoundException.class)
+    public ResponseEntity<String> handleInstanceNotFoundException(InstanceNotFoundException e){
+        return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
     }
 }

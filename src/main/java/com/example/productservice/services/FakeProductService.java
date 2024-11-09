@@ -10,6 +10,7 @@ import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
+import javax.management.InstanceNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +22,12 @@ public class FakeProductService implements ProductService {
         this.restTemplate = restTemplate;
     }
     @Override
-    public Product getProductByID(Long id) {
+    public Product getProductByID(Long id) throws InstanceNotFoundException {
         FakeStoreProductDto fakeStoreProductDto=restTemplate.getForObject("https://fakestoreapi.com/products/"+id,
                 FakeStoreProductDto.class);
+        if (fakeStoreProductDto==null){
+            throw new InstanceNotFoundException("Product not found"+id);
+        }
         return convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
     }
 
