@@ -54,6 +54,20 @@ public class FakeProductService implements ProductService {
         return convertFakeStoreProductDtoToProduct(fakeStoreProductDto1);
     }
 
+    public Product deleteProduct(Long id){
+
+        ResponseExtractor<ResponseEntity<FakeStoreProductDto>> responseExtractor=restTemplate.responseEntityExtractor(FakeStoreProductDto.class);
+        FakeStoreProductDto fakeStoreProductDto1=restTemplate
+                .execute("https://fakestoreapi.com/products/"+id, HttpMethod.DELETE, null,responseExtractor)
+                .getBody();
+        return convertFakeStoreProductDtoToProduct(fakeStoreProductDto1);
+    }
+
+    @Override
+    public Product createProduct(Product product) {
+        return null;
+    }
+
     private Product convertFakeStoreProductDtoToProduct(FakeStoreProductDto fakeStoreProductDto){
 
         if (fakeStoreProductDto==null){

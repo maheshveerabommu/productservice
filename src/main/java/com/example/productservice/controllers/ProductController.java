@@ -16,7 +16,7 @@ import java.util.List;
 public class ProductController {
     ProductService productservice;
 
-    public ProductController(ProductService productservice) {
+    public ProductController(  ProductService productservice) {
         this.productservice = productservice;
     }
     @GetMapping("/{id}")
@@ -41,6 +41,18 @@ public class ProductController {
     @PutMapping("/{id}")
     public Product replaceProduct(@PathVariable("id") Long id, @RequestBody Product product){
         return productservice.replaceProduct(id, product);
+    }
+
+    @DeleteMapping("/{id}")
+    public String  deleteProduct(@PathVariable("id") Long id){
+
+        productservice.deleteProduct(id);
+        return "Product deleted successfully";
+    }
+
+    @PostMapping()
+    public Product createProduct(@RequestBody Product product){
+        return productservice.createProduct(product);
     }
 
 //    @ExceptionHandler(ProductNotFoundException.class)
