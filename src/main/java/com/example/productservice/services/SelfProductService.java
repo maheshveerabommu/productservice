@@ -28,7 +28,7 @@ public class SelfProductService implements ProductService {
 
     @Override
     public List<Product> getAllProducts() {
-        return null;
+        return productRepo.findAll();
     }
 
     @Override
@@ -38,7 +38,9 @@ public class SelfProductService implements ProductService {
 
     @Override
     public Product deleteProduct(Long id) {
-        return null;
+        Product product=productRepo.findAllById(id);
+        productRepo.deleteById(id);
+        return product;
     }
 
     @Override

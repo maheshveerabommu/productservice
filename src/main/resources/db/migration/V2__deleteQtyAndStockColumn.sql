@@ -1,8 +1,10 @@
 ALTER TABLE product
-    ADD qty INT NULL;
+DROP
+COLUMN qty;
 
 ALTER TABLE product
-    MODIFY qty INT NOT NULL;
+DROP
+COLUMN stock;
 
 ALTER TABLE st_user
     MODIFY avg_rating INT NOT NULL;

@@ -19,5 +19,6 @@ public class Product extends BaseModel{
     Category category;
 //    @ManyToMany(mappedBy = "productlist")
 //    List<Category> categories;
-    int qty;
+//    int qty;
+//    int stock;
 }
