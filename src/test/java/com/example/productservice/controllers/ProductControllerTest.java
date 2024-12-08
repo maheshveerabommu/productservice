@@ -35,8 +35,22 @@ class ProductControllerTest {
         Product product=productController.getproductByID(id).getBody();
         // Assert
         Assertions.assertEquals("Test product", product.getTitle());
-
-
+        Assertions.assertEquals(2L, product.getId());
 
     }
+    @Test
+    void ProductNotFoundExpection() throws ProductNotFoundException {
+        // Arrange
+        Long id = 2L;
+        Product p=new Product();
+        p.setId(2L);
+        p.setTitle("Test product");
+
+        Mockito.when(productService.getProductByID(2L)).thenThrow(ProductNotFoundException.class);
+
+        // Act & Assert
+        Assertions.assertThrows(ProductNotFoundException.class,()->productController.getproductByID(id).getBody());
+
+    }
+
 }
