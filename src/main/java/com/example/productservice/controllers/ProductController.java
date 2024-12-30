@@ -4,6 +4,8 @@ import com.example.productservice.dtos.ProductNotFoundExpectionDto;
 import com.example.productservice.exceptions.ProductNotFoundException;
 import com.example.productservice.models.Product;
 import com.example.productservice.services.ProductService;
+import com.example.productservice.services.TokenService;
+import org.hibernate.cache.spi.access.UnknownAccessTypeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +17,15 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
     ProductService productservice;
+    TokenService tokenService;
 
-    public ProductController(  ProductService productservice) {
+    public ProductController(  ProductService productservice, TokenService tokenService) {
         this.productservice = productservice;
+        this.tokenService =tokenService;
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getproductByID(@PathVariable("id") Long id) throws  ProductNotFoundException {
+    public ResponseEntity<Product> getproductByID
+            (@PathVariable("id") Long id) throws  ProductNotFoundException {
         Product product= productservice.getProductByID(id);
         ResponseEntity<Product> responseEntity;
 
@@ -34,7 +39,12 @@ public class ProductController {
     }
 
     @GetMapping()
-    public List<Product> getAllProducts(){ //hello2
+    public List<Product> getAllProducts(
+            @RequestHeader("Token") String token){
+
+        if(!tokenService.TokenValidation(token)){
+            throw new UnknownAccessTypeException("User is not UnAuthroized");
+        }
         return productservice.getAllProducts();
     }
 
