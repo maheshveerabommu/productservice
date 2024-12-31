@@ -40,11 +40,12 @@ public class ProductController {
 
     @GetMapping()
     public List<Product> getAllProducts(
-            @RequestHeader("Token") String token){
+//            @RequestHeader("Token") String token)
+    ){
 
-        if(!tokenService.TokenValidation(token)){
-            throw new UnknownAccessTypeException("User is not UnAuthroized");
-        }
+//        if(!tokenService.TokenValidation(token)){
+//            throw new UnknownAccessTypeException("User is not UnAuthroized");
+//        }
         return productservice.getAllProducts();
     }
 
