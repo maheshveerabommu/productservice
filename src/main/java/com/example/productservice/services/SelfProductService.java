@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service("SelfProductService")
-@Primary
 public class SelfProductService implements ProductService {
     ProductRepo productRepo;
     CategoryRepo categoryRepo;
